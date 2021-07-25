@@ -2,11 +2,10 @@
   "name": "notion-scripts",
   "version": "1.0.0",
   "main": "index.js",
-  "type": "module",
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "start": "yarn build && node dist/index.js"
+    "start": "node dist/index.js"
   },
   "devDependencies": {
     "typescript": "^4.3.5"
