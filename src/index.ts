@@ -1,5 +1,5 @@
 import { getProjects } from './projects'
-import { getCurrentSprint } from './sprint'
+import { addTaskToCurrentSprint, getCurrentSprint } from './sprint'
 import { getCurrentTasks } from './tasks'
 
-getCurrentSprint()
+addTaskToCurrentSprint('fd014fc7a0b942baad955ecd0029e438')
