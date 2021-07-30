@@ -1,10 +1,6 @@
-import {
-  Filter,
-  RelationProperty,
-  SelectPropertyValue,
-} from '@notionhq/client/build/src/api-types'
+import { Filter } from '@notionhq/client/build/src/api-types'
 import { databases } from './databases'
-import { getProperty, getTitleName, getTitleProperty, notion } from './notion'
+import { notion } from './notion'
 import { getCurrentProjects } from './projects'
 
 export async function getTasks(filter?: Filter) {
@@ -16,15 +12,11 @@ export async function getTasks(filter?: Filter) {
   return results
 }
 
-function existsPredicate<T>(val: T): val is T {
-  return !!val
-}
-
 export async function getCurrentTasks() {
-  const results = await getCurrentProjects()
-  const ids = results.map(({ id }) => id)
+  const currentProjects = await getCurrentProjects()
+  const projectIds = currentProjects.map(({ id }) => id)
   const tasks = await getTasks({
-    or: ids.map((id) => ({
+    or: projectIds.map((id) => ({
       and: [
         {
           property: 'Project',
@@ -40,15 +32,7 @@ export async function getCurrentTasks() {
         },
       ],
     })),
-    //   [
-    //   {
-    //     property: 'Project',
-    //     relation: {
-    //       contains: 'Apply for Jobs',
-    //     },
-    //   },
-    // ],
   })
 
-  console.log(tasks.map(getTitleName))
+  return tasks
 }
