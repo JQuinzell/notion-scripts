@@ -5,7 +5,10 @@ import {
   PropertyValue,
   TitlePropertyValue,
 } from '@notionhq/client/build/src/api-types'
+import { config } from 'dotenv'
 import { databases } from './databases'
+
+config()
 
 export const notion = new Client({ auth: process.env.API_KEY })
 
@@ -39,6 +42,7 @@ export function getTitleProperty(database: Page): TitlePropertyValue {
 }
 
 export function getTitleName(database: Page): string {
+  console.log({ database })
   const { title } = getTitleProperty(database)
   return title[0]?.plain_text ?? ''
 }

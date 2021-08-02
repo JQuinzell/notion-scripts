@@ -34,6 +34,7 @@ export async function addTaskToCurrentSprint(taskId: string) {
       ?.relation as unknown as any[]) || []
   // This type is also wrong?
   const Tasks = [...existingRelation, { id: taskId }] as any
+  console.log(Tasks)
   await notion.pages.update({
     page_id: taskId,
     properties: {
