@@ -2,9 +2,11 @@ import { Filter, RelationProperty } from '@notionhq/client/build/src/api-types'
 import { databases } from './databases'
 import { getProperty, getTitleName, notion } from './notion'
 
+const queryParams = { database_id: databases.sprints }
+
 export async function getSprints(filter?: Filter) {
   const { results } = await notion.databases.query({
-    database_id: databases.sprints,
+    ...queryParams,
     filter,
   })
 
@@ -24,6 +26,21 @@ export async function getCurrentSprint() {
   if (!sprint) throw new Error('No Current Sprint')
   if (sprints.length > 1) throw new Error('More than 1 current sprint')
   return sprint
+}
+
+export async function getLastSprint() {
+  console.log('getting last sprint')
+  const { results } = await notion.databases.query({
+    ...queryParams,
+    sorts: [
+      {
+        property: 'Date Range',
+        direction: 'descending',
+      },
+    ],
+    page_size: 1,
+  })
+  return results[0]
 }
 
 export async function addTaskToCurrentSprint(taskId: string) {
