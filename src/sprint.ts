@@ -1,4 +1,8 @@
-import { Filter, RelationProperty } from '@notionhq/client/build/src/api-types'
+import {
+  Filter,
+  FormulaFilter,
+  RelationProperty,
+} from '@notionhq/client/build/src/api-types'
 import { databases } from './databases'
 import { getProperty, getTitleName, notion } from './notion'
 
@@ -19,7 +23,8 @@ export async function getCurrentSprint() {
     formula: {
       checkbox: {
         equals: true,
-      },
+        // Notion types are wrong.
+      } as unknown as FormulaFilter['formula']['checkbox'],
     },
   })
   const [sprint] = sprints
