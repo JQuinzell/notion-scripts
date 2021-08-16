@@ -1,8 +1,19 @@
-import { getTitleName } from './notion'
+import { getProperty, getTitleName } from './notion'
 import { getProjects } from './projects'
-import { getLastSprint } from './sprint'
+import {
+  createNextSprint,
+  createSprint,
+  getCurrentSprint,
+  getLastSprint,
+} from './sprint'
 import { getActionableTasks, getCurrentTasks } from './tasks'
+import * as cron from 'node-cron'
+import { DateProperty } from '@notionhq/client/build/src/api-types'
+import { addDays, format, formatISO, parseISO } from 'date-fns'
 
-getLastSprint()
-  .then((sprint) => console.log(getTitleName(sprint), 'WTF?'))
-  .catch(console.error)
+cron.schedule('0 0 * * *', () => {
+  console.log('Checking sprint')
+  createNextSprint().catch(console.error)
+})
+// Get last sprint end date
+// schedule for time
