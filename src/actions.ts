@@ -5,6 +5,7 @@ import { addTaskToCurrentSprint } from './sprint'
 interface ActionMap {
   [name: string]: ((page: Page) => Promise<void>) | undefined
 }
+
 export const taskActions: ActionMap = {
   async 'Add to sprint'(task: Page) {
     console.log('Adding to sprint')

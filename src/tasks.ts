@@ -1,12 +1,10 @@
 import {
   Filter,
-  SelectOptionWithName,
-  SelectProperty,
   SelectPropertyValue,
 } from '@notionhq/client/build/src/api-types'
 import { taskActions } from './actions'
 import { databases } from './databases'
-import { getProperty, getTitleName, notion } from './notion'
+import { getProperty, notion } from './notion'
 import { getCurrentProjects } from './projects'
 
 export async function getTasks(filter?: Filter) {
@@ -16,6 +14,27 @@ export async function getTasks(filter?: Filter) {
   })
 
   return results
+}
+
+export async function getIncompleteTasks(sprintId: string) {
+  return await getTasks({
+    and: [
+      {
+        property: 'Sprint',
+        relation: {
+          contains: sprintId,
+        },
+      },
+      {
+        property: 'Done',
+        formula: {
+          checkbox: {
+            equals: false,
+          } as any,
+        },
+      },
+    ],
+  })
 }
 
 export async function getCurrentTasks() {
