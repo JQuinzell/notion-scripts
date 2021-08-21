@@ -13,4 +13,3 @@ function getDatabases() {
 }
 
 export const databases = getDatabases()
-console.log({ databases })

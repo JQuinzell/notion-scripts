@@ -8,7 +8,6 @@ interface ActionMap {
 
 export const taskActions: ActionMap = {
   async 'Add to sprint'(task: Page) {
-    console.log('Adding to sprint')
     await addTaskToCurrentSprint(task.id)
     console.log(`Added task ${getTitleName(task)} to current sprint`)
   },

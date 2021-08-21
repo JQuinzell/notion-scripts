@@ -1,7 +1,12 @@
 import { createNextSprint } from './sprint'
 import * as cron from 'node-cron'
+import { getActionableTasks } from './tasks'
+import { notion } from './notion'
 
 cron.schedule('0 0 * * *', () => {
-  console.log('Checking sprint')
   createNextSprint().catch(console.error)
+})
+
+cron.schedule('*/1 * * * *', () => {
+  getActionableTasks().catch(console.error)
 })

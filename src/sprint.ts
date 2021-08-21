@@ -110,7 +110,6 @@ export async function setSprintCurrent(id: string, isCurrent: boolean) {
 }
 
 export async function getLastSprint() {
-  console.log('getting last sprint')
   const { results } = await notion.databases.query({
     ...queryParams,
     sorts: [

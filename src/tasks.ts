@@ -4,7 +4,7 @@ import {
 } from '@notionhq/client/build/src/api-types'
 import { taskActions } from './actions'
 import { databases } from './databases'
-import { getProperty, notion } from './notion'
+import { getProperty, getTitleName, notion } from './notion'
 import { getCurrentProjects } from './projects'
 
 export async function getTasks(filter?: Filter) {
@@ -63,17 +63,40 @@ export async function getCurrentTasks() {
 }
 
 export async function getActionableTasks() {
-  console.log('Getting tasks')
   const tasks = await getTasks({
-    property: 'Actions',
-    select: { is_not_empty: true },
+    and: [
+      {
+        property: 'Action',
+        select: { is_not_empty: true },
+      },
+      {
+        property: 'Action',
+        select: { does_not_equal: 'None' },
+      },
+    ],
   })
-  console.log('Got tasks')
-  tasks.map((task) => {
-    console.log(task.properties.Actions)
-    const actionProperty = getProperty<SelectPropertyValue>(task, 'Actions')!
-    const action = taskActions[actionProperty.select.name!]
-    action?.(task)
-  })
+  await Promise.all(
+    tasks.map(async (task) => {
+      const actionProperty = getProperty<SelectPropertyValue>(task, 'Action')!
+      const actionName = actionProperty.select.name!
+      const action = taskActions[actionName]
+      console.log(
+        `Performing action ${actionName} on task ${getTitleName(task)}`
+      )
+      await action?.(task)
+      await notion.pages.update({
+        page_id: task.id,
+        properties: {
+          Action: {
+            type: 'select',
+            select: {
+              name: 'None',
+            },
+          },
+        },
+        archived: false,
+      })
+    })
+  )
   return tasks
 }
