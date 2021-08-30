@@ -146,3 +146,13 @@ export async function addTaskToCurrentSprint(taskId: string) {
   const taskIds = [...existingRelation, { id: taskId }]
   await setSprintTasks(currentSprint.id, taskIds)
 }
+
+export async function removeTaskFromCurrentSprint(taskId: string) {
+  const currentSprint = await getCurrentSprint()
+  // The type doesn't have the same value as the API result
+  const existingRelation =
+    (getProperty<RelationProperty>(currentSprint, 'Tasks')
+      ?.relation as unknown as any[]) || []
+  const taskIds = existingRelation.filter(({ id }) => id !== taskId)
+  await setSprintTasks(currentSprint.id, taskIds)
+}
