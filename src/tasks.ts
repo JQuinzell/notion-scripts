@@ -85,21 +85,21 @@ export async function getActionableTasks() {
           `Performing action ${actionName} on task ${getTitleName(task)}`
         )
         await action?.(task)
-        await notion.pages.update({
-          page_id: task.id,
-          properties: {
-            Action: {
-              type: 'select',
-              select: {
-                name: 'None',
-              },
-            },
-          },
-          archived: false,
-        })
       } else {
         console.log('No action', actionName)
       }
+      await notion.pages.update({
+        page_id: task.id,
+        properties: {
+          Action: {
+            type: 'select',
+            select: {
+              name: 'None',
+            },
+          },
+        },
+        archived: false,
+      })
     })
   )
   return tasks
